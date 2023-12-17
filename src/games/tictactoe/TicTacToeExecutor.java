@@ -18,7 +18,7 @@ public class TicTacToeExecutor implements CommandExecutor {
     /* =========================================================== */
     private static final String UNKNOWN_COMMAND = "Unknown command";
     public static final String DISCONNECTED = "Disconnected from the server";
-
+    public static String helpMessage = "PRINTING HELP MESSAGE!";
     Game game;
 
     public TicTacToeExecutor(Game game) {
@@ -50,5 +50,9 @@ public class TicTacToeExecutor implements CommandExecutor {
     }
     public String exit() {
         return DISCONNECTED;
+    }
+
+    public String help() {
+        return helpMessage;
     }
 }
