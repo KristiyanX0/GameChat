@@ -4,27 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d99d42b9-4abc-4634-995a-63d1c7e16bb1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GameChat.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/command/Command.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/command/CommandCreator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/command/CommandExecutor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/games/Game.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/games/tictactoe/Matrix.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/games/tictactoe/TicTacToe.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/games/tictactoe/TicTacToeExecutor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/network/Client.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/network/ClientHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/network/Server.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/network/TypeNotification.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/util/Pair.java" afterDir="false" />
+    <list default="true" id="d99d42b9-4abc-4634-995a-63d1c7e16bb1" name="Changes" comment="first commit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,6 +117,19 @@
       <option name="presentableId" value="Default" />
       <updated>1702564212141</updated>
     </task>
+    <task id="LOCAL-00001" summary="first commit">
+      <option name="closed" value="true" />
+      <created>1702810049385</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1702810049385</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
   </component>
 </project>
