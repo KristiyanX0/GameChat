@@ -5,7 +5,6 @@ import command.CommandCreator;
 import command.CommandExecutor;
 import games.tictactoe.TicTacToeExecutor;
 import util.Response;
-import util.ResponseType;
 
 import java.io.*;
 import java.net.Socket;
@@ -18,7 +17,7 @@ import static network.TypeNotification.*;
 
 public class ClientHandler implements Runnable {
     // SIZE MAX IS CURRENTLY 2 BUT IT CAN BE EASILY SCALED
-    private static final int MAX_SIZE_CLIENTS = 2;
+    private static final int MAX_SIZE_CLIENTS = 4;
     private final String inGameResponse = "# ->" + System.lineSeparator();
     private static HashMap<String, ClientHandler> clientHandlers = new HashMap<>();
     private Socket socket;
@@ -90,7 +89,6 @@ public class ClientHandler implements Runnable {
         while (socket.isConnected()) {
             try {
                 messageFromClient = bufferedReader.readLine();
-                System.out.println(messageFromClient);
                 if (CommandExecutor.isCommand(clientHandlers.keySet(), messageFromClient)) {
                     Command command = CommandCreator.newCommand(messageFromClient);
                     System.out.println(command);

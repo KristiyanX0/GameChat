@@ -11,15 +11,15 @@ public class TicTacToe {
     public final Character X = 'X';
     public final Character O = 'O';
     Matrix matrix;
-
     private int movesCount;
     Pair<Character, String> player1;
     Pair<Character, String> player2;
     Pair<Character,Pair<Integer,Integer>> lastMove;
     TicTacToe(String username1, String username2) {
         this.player1 = new Pair<>(X, username1);
-        this.player2 = new Pair<>(X, username2);
+        this.player2 = new Pair<>(O, username2);
         movesCount = 0;
+        lastMove = new Pair<>('Z' ,new Pair<>(-1, -1));
         matrix = new Matrix(MATRIX_SIZE);
     }
 
@@ -30,6 +30,11 @@ public class TicTacToe {
      * @return If on the specific square we have put a 'c'
      */
     public boolean put(Character c, int row, int col) {
+        // LEFT FOR DEBUGGING
+        System.out.println((!matrix.get(row,col).equals(X) && !matrix.get(row,col).equals(O)) + " - First ");
+        System.out.println((!lastMove.getFirst().equals(c)) + " - Second ");
+        System.out.println((movesCount != 0 || c.equals(X)) + " - Third ");
+
         if (!matrix.get(row,col).equals(X) && !matrix.get(row,col).equals(O) &&
                 !lastMove.getFirst().equals(c) && (movesCount != 0 || c.equals(X))) {
             matrix.set(c,row,col);
@@ -49,7 +54,7 @@ public class TicTacToe {
         return false;
     }
 
-    private Pair<Character,List<Pair<Integer,Integer>>> existsWinningSequence() {
+    private Pair<Character,List<Pair<Integer,Integer>>> winningSequence() {
         for (int i = 0; i < MATRIX_SIZE; i++) {
             if (matrix.get(0,i) == matrix.get(1,i) && matrix.get(1,i) == matrix.get(2,i)) {
                 ArrayList<Pair<Integer, Integer>> list = new ArrayList<>();
@@ -85,12 +90,21 @@ public class TicTacToe {
         return null;
     }
 
+    private boolean existWinningSequence() {
+        return !(winningSequence() == null);
+    }
     public Character getPlayerSign(String player) {
         return (player.equals(player1.getSecond())) ? player1.getFirst() : player2.getFirst();
     }
-
+    public Character getWinner() {
+        if (existWinningSequence() || hasEnded()) {
+            List<Pair<Integer, Integer>> list = winningSequence().getSecond();
+            return matrix.get(list.get(0).getFirst(), list.get(0).getSecond());
+        }
+        return null;
+    }
     public boolean hasEnded() {
-        return !(existsWinningSequence() == null);
+        return existWinningSequence() || (movesCount >= 9);
     }
 
     Matrix getMatrix() {

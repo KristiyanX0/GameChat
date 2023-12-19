@@ -6,22 +6,25 @@ import util.Response;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class TicTacToeExecutor {
 
-    /* ===================== FIRST COMMAND ======================= */
-    private static final String PRINT = "print";
+    /* ================== IN GAME COMMANDS ================== */
     private static final String HELP = "help";
     private static final String CREATE = "create";
     private static final String EXIT = "exit";
-
-    /* ===================== INGAME COMMAND ====================== */
     private static final String HIT = "hit";
-    /* =========================================================== */
-    private static final String UNKNOWN_COMMAND = "Unknown command";
-    private static final String DISCONNECTED = "Disconnected from the server";
+    private static final String LIST = "list";
     private static final String SIGN = "sign";
+    private static final String PRINT = "print";
+
+    /* ===================== RESPONSES ====================== */
+    private static final String END = "ENDED THE GAME";
+    private static final String UNKNOWN_COMMAND = "Unknown command";
+
+
     private static HashMap<String,TicTacToe> games = new HashMap<>();;
 
     private static Response newGame(Command command, String currentPlayer) {
@@ -44,6 +47,7 @@ public class TicTacToeExecutor {
             case EXIT -> exit(cmd);
             case PRINT -> print(cmd, currentPlayer);
             case HELP -> help(cmd);
+            case LIST -> listOfActiveGames(cmd, currentPlayer);
             default -> new Response(UNKNOWN_COMMAND, List.of(currentPlayer));
         };
     }
@@ -66,11 +70,11 @@ public class TicTacToeExecutor {
     }
     // The command looks like this: "hit row-column"
     public static Response hit(Command cmd, String currentPlayer) {
-        games.get(cmd.game()).put(cmd.game(), Integer.parseInt(cmd.command(1)), Integer.parseInt(cmd.command(2)));
+        games.get(cmd.game()).put(currentPlayer, Integer.parseInt(cmd.command(1)), Integer.parseInt(cmd.command(2)));
         return print(cmd, currentPlayer);
     }
     public static Response exit(Command command) {
-        return new Response(DISCONNECTED, List.of(games.get(command.game()).player1.getSecond(), games.get(command.game()).player2.getSecond()));
+        return new Response(END, List.of(games.get(command.game()).player1.getSecond(), games.get(command.game()).player2.getSecond()));
     }
 
     public static Response help(Command command) {
@@ -80,6 +84,14 @@ public class TicTacToeExecutor {
                 "*player name* *game name* exit - exit from a game and automatically deletes it!" + System.lineSeparator() +
                 "*player name* *game name* print - prints the board you are playing on!" + System.lineSeparator();
         return new Response(response, List.of(games.get(command.game()).player1.getSecond()));
+    }
+
+    public static Response listOfActiveGames(Command command, String currentPlayer) {
+        StringBuilder response = new StringBuilder();
+        for (Map.Entry<String, TicTacToe> game : games.entrySet()) {
+            response.append(game.getKey()).append(" -> [ ").append(game.getValue().player1.getSecond()).append(game.getValue().player2.getSecond()).append(" ]");
+        }
+        return new Response(response.toString(), List.of(currentPlayer));
     }
 }
 
