@@ -1,21 +1,30 @@
 package network;
 
+import command.Command;
+import command.CommandCreator;
+import command.CommandExecutor;
+import games.tictactoe.TicTacToeExecutor;
+import util.Response;
+import util.ResponseType;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static network.TypeNotification.*;
 
 public class ClientHandler implements Runnable {
     // SIZE MAX IS CURRENTLY 2 BUT IT CAN BE EASILY SCALED
     private static final int MAX_SIZE_CLIENTS = 2;
+    private final String inGameResponse = "# ->" + System.lineSeparator();
     private static HashMap<String, ClientHandler> clientHandlers = new HashMap<>();
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientUsername;
-
     public static boolean createAnInstance(Socket socket) {
         if (!ClientHandler.isFull()) {
             ClientHandler clientHandler = new ClientHandler(socket);
@@ -39,6 +48,13 @@ public class ClientHandler implements Runnable {
             throw new RuntimeException(e);
         }
     }
+    private void sendMessage(String message, TypeNotification typeNotification, Set<String> usernames) {
+        for (Map.Entry<String, ClientHandler> clientHandler : clientHandlers.entrySet()) {
+            if (usernames.contains(clientHandler.getKey()) && typeNotification.equals(OTHER_PLAYERS)) {
+                sendMessage(message, PLAYER, clientHandler.getKey());
+            }
+        }
+    }
     private void sendMessage(String message, TypeNotification typeNotification, String username) {
         if (typeNotification.equals(PLAYER) && !clientHandlers.get(username).equals(clientUsername)) {
             try {
@@ -54,13 +70,7 @@ public class ClientHandler implements Runnable {
         for (Map.Entry<String, ClientHandler> clientHandler : clientHandlers.entrySet()) {
             if (typeNotification.equals(BROADCAST) ||
                     (!clientHandler.getKey().equals(clientUsername) && typeNotification.equals(OTHER_PLAYERS))) {
-                try {
-                    clientHandler.getValue().bufferedWriter.write(message);
-                    clientHandler.getValue().bufferedWriter.newLine();
-                    clientHandler.getValue().bufferedWriter.flush();
-                } catch (IOException e) {
-                    closeEverything(socket, bufferedReader, bufferedWriter);
-                }
+                sendMessage(message, PLAYER, clientHandler.getKey());
             }
         }
     }
@@ -80,7 +90,15 @@ public class ClientHandler implements Runnable {
         while (socket.isConnected()) {
             try {
                 messageFromClient = bufferedReader.readLine();
-                sendMessage(messageFromClient, OTHER_PLAYERS);
+                System.out.println(messageFromClient);
+                if (CommandExecutor.isCommand(clientHandlers.keySet(), messageFromClient)) {
+                    Command command = CommandCreator.newCommand(messageFromClient);
+                    System.out.println(command);
+                    Response response = TicTacToeExecutor.execute(command, clientUsername);
+                    sendMessage(inGameResponse + response.message(), OTHER_PLAYERS, Set.copyOf(response.client()));
+                } else {
+                    sendMessage(messageFromClient, OTHER_PLAYERS);
+                }
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
                 break;

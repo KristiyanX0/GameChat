@@ -1,58 +1,88 @@
 package games.tictactoe;
 
 import command.Command;
-import command.CommandExecutor;
-import games.Game;
+import util.Matrix;
+import util.Response;
 
-public class TicTacToeExecutor implements CommandExecutor {
+import java.util.HashMap;
+import java.util.List;
+
+
+public class TicTacToeExecutor {
 
     /* ===================== FIRST COMMAND ======================= */
-    private static final String INVITE = "create";
-    private static final String JOIN = "join";
     private static final String PRINT = "print";
     private static final String HELP = "help";
+    private static final String CREATE = "create";
     private static final String EXIT = "exit";
 
     /* ===================== INGAME COMMAND ====================== */
     private static final String HIT = "hit";
     /* =========================================================== */
     private static final String UNKNOWN_COMMAND = "Unknown command";
-    public static final String DISCONNECTED = "Disconnected from the server";
-    public static String helpMessage = "PRINTING HELP MESSAGE!";
-    Game game;
+    private static final String DISCONNECTED = "Disconnected from the server";
+    private static final String SIGN = "sign";
+    private static HashMap<String,TicTacToe> games = new HashMap<>();;
 
-    public TicTacToeExecutor(Game game) {
-        this.game = game;
+    private static Response newGame(Command command, String currentPlayer) {
+        String response =  (!games.containsKey(command.game()) ?
+                "New game called " + command.game() + " was created!" :
+                command.game() + " already exist!");
+        games.putIfAbsent(command.game(), new TicTacToe(currentPlayer, command.player()));
+        return new Response(response, List.of(currentPlayer, command.player()));
     }
-    public String execute(Command cmd) {
-        return switch (cmd.command()) {
-            case INVITE -> invite(cmd);
-            case HIT -> hit(cmd);
-            case EXIT -> exit();
-            case PRINT -> print(cmd);
-            default -> UNKNOWN_COMMAND;
+
+    public static boolean ifGameExist(Command command) {
+        return games.containsKey(command.game());
+    }
+
+    public static Response execute(Command cmd, String currentPlayer) {
+        return switch (cmd.command(0)) {
+            case CREATE -> newGame(cmd, currentPlayer);
+            case SIGN -> mySign(cmd, currentPlayer);
+            case HIT -> hit(cmd, currentPlayer);
+            case EXIT -> exit(cmd);
+            case PRINT -> print(cmd, currentPlayer);
+            case HELP -> help(cmd);
+            default -> new Response(UNKNOWN_COMMAND, List.of(currentPlayer));
         };
     }
 
-    private String invite(Command cmd) {
-        return null;
-    }
-    // print
-    public String print(Command cmd) {
-        return null;
-    }
-    // The command looks like this: "hit row-column"
-    public String hit(Command cmd) {
-        return null;
-    }
-    public String join(Command cmd) {
-        return null;
-    }
-    public String exit() {
-        return DISCONNECTED;
+    private static Response mySign(Command cmd, String currentPlayer) {
+        return new Response(games.get(cmd.game()).getPlayerSign(currentPlayer).toString(), List.of(currentPlayer));
     }
 
-    public String help() {
-        return helpMessage;
+    // print
+    public static Response print(Command cmd, String currentPlayer) {
+        Matrix matrix = games.get(cmd.game()).getMatrix();
+        StringBuilder response = new StringBuilder();
+        for (int i = 0; i < matrix.size(); ++i) {
+            for (int j = 0; j < matrix.size(); ++j) {
+                response.append(matrix.get(i, j).toString()).append(" | ");
+            }
+            response.append(System.lineSeparator());
+        }
+        return new Response(response.toString(), List.of(currentPlayer));
+    }
+    // The command looks like this: "hit row-column"
+    public static Response hit(Command cmd, String currentPlayer) {
+        games.get(cmd.game()).put(cmd.game(), Integer.parseInt(cmd.command(1)), Integer.parseInt(cmd.command(2)));
+        return print(cmd, currentPlayer);
+    }
+    public static Response exit(Command command) {
+        return new Response(DISCONNECTED, List.of(games.get(command.game()).player1.getSecond(), games.get(command.game()).player2.getSecond()));
+    }
+
+    public static Response help(Command command) {
+        String response = "The commands are" + System.lineSeparator() +
+                "*player name* *game name* hit x y - you place your marker on a square where x and y are the coordinates!" + System.lineSeparator() +
+                "*player name* *game name* create - create a new game if it doesn't exist or this one has ended!" + System.lineSeparator() +
+                "*player name* *game name* exit - exit from a game and automatically deletes it!" + System.lineSeparator() +
+                "*player name* *game name* print - prints the board you are playing on!" + System.lineSeparator();
+        return new Response(response, List.of(games.get(command.game()).player1.getSecond()));
     }
 }
+
+//-> john game0 create
+//-> john game0 print
+//

@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 public class Client {
     public static final int SERVER_PORT = 16969;
-    public static final String RESPONSE = "# -> ";
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
@@ -45,27 +44,19 @@ public class Client {
         }
     }
 
-    public void printOnScreen(String message) {
-        if (message.startsWith(RESPONSE)) {
-
-        }
-
-    }
     public void listenForMessage() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String messageFromGroupChat;
-                while (socket.isConnected()) {
-                    try {
-                        messageFromGroupChat = bufferedReader.readLine();
-                        System.out.println(messageFromGroupChat);
-                    } catch (IOException e) {
-                        closeEverything(socket, bufferedReader, bufferedWriter);
-                    }
+        Thread thread = new Thread(()-> {
+            String messageFromGroupChat;
+            while (socket.isConnected()) {
+                try {
+                    messageFromGroupChat = bufferedReader.readLine();
+                    System.out.println(messageFromGroupChat);
+                } catch (IOException e) {
+                    closeEverything(socket, bufferedReader, bufferedWriter);
                 }
             }
-        }).start();
+        });
+        thread.start();
     }
 
     private void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
@@ -88,6 +79,11 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter your username: ");
         String username = scanner.nextLine();
+        while (username.split(" ").length > 1) {
+            System.out.println("INVALID username!");
+            System.out.print("Enter your username: ");
+            username = scanner.nextLine();
+        }
         Socket socketX = new Socket("localhost", SERVER_PORT);
         Client client = new Client(socketX, username);
         client.listenForMessage();

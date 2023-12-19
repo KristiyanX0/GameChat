@@ -1,31 +1,56 @@
 package games.tictactoe;
 
-import games.Game;
+import util.Matrix;
 import util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TicTacToe implements Game {
-    Matrix matrix;
+public class TicTacToe {
+    public static final int MATRIX_SIZE = 3;
     public final Character X = 'X';
     public final Character O = 'O';
+    Matrix matrix;
+
+    private int movesCount;
+    Pair<Character, String> player1;
+    Pair<Character, String> player2;
     Pair<Character,Pair<Integer,Integer>> lastMove;
-    public TicTacToe() {
-        matrix = new Matrix();
+    TicTacToe(String username1, String username2) {
+        this.player1 = new Pair<>(X, username1);
+        this.player2 = new Pair<>(X, username2);
+        movesCount = 0;
+        matrix = new Matrix(MATRIX_SIZE);
     }
 
+    /**
+     * @param c X or O
+     * @param row
+     * @param col
+     * @return If on the specific square we have put a 'c'
+     */
     public boolean put(Character c, int row, int col) {
-        if (!matrix.get(row,col).equals(X) && !matrix.get(row,col).equals(O)) {
+        if (!matrix.get(row,col).equals(X) && !matrix.get(row,col).equals(O) &&
+                !lastMove.getFirst().equals(c) && (movesCount != 0 || c.equals(X))) {
             matrix.set(c,row,col);
-            lastMove = new Pair<>(c,new Pair<>(row, col));
+            lastMove = new Pair<>(c ,new Pair<>(row, col));
+            movesCount++;
             return true;
         }
         return false;
     }
 
-    public Pair<Character,List<Pair<Integer,Integer>>> existWinningSequence() {
-        for (int i = 0; i < Matrix.MATRIX_SIZE; i++) {
+    public boolean put(String player, int row, int col) {
+        if (player.equals(player1.getSecond())) {
+            return put(player1.getFirst(), row, col);
+        } else if (player.equals(player2.getSecond())) {
+            return put(player2.getFirst(), row, col);
+        }
+        return false;
+    }
+
+    private Pair<Character,List<Pair<Integer,Integer>>> existsWinningSequence() {
+        for (int i = 0; i < MATRIX_SIZE; i++) {
             if (matrix.get(0,i) == matrix.get(1,i) && matrix.get(1,i) == matrix.get(2,i)) {
                 ArrayList<Pair<Integer, Integer>> list = new ArrayList<>();
                 list.add(new Pair<>(0,i));
@@ -34,7 +59,7 @@ public class TicTacToe implements Game {
                 return new Pair<>(matrix.get(0,i), list);
             }
         }
-        for (int i = 0; i < Matrix.MATRIX_SIZE; i++) {
+        for (int i = 0; i < MATRIX_SIZE; i++) {
             if (matrix.get(i,0) == matrix.get(i,1) && matrix.get(i,1) == matrix.get(i,2)) {
                 ArrayList<Pair<Integer, Integer>> list = new ArrayList<>();
                 list.add(new Pair<>(i,0));
@@ -60,7 +85,15 @@ public class TicTacToe implements Game {
         return null;
     }
 
+    public Character getPlayerSign(String player) {
+        return (player.equals(player1.getSecond())) ? player1.getFirst() : player2.getFirst();
+    }
+
     public boolean hasEnded() {
-        return !(existWinningSequence() == null);
+        return !(existsWinningSequence() == null);
+    }
+
+    Matrix getMatrix() {
+        return matrix;
     }
 }
