@@ -1,7 +1,5 @@
 package util;
 
-import static java.util.Collections.fill;
-
 public class Matrix {
     public final int size;
     private Character[][] matrix;
