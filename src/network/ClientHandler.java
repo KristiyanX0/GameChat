@@ -92,7 +92,7 @@ public class ClientHandler implements Runnable {
                 if (CommandExecutor.isCommand(clientHandlers.keySet(), messageFromClient)) {
                     Command command = CommandCreator.newCommand(messageFromClient);
                     System.out.println(command);
-                    Response response = TicTacToeExecutor.execute(command, clientUsername);
+                    Response response = TicTacToeExecutor.execute(command, clientUsername, clientHandlers.keySet().stream().toList());
                     sendMessage(inGameResponse + response.message(), OTHER_PLAYERS, Set.copyOf(response.client()));
                 } else {
                     sendMessage(messageFromClient, OTHER_PLAYERS);

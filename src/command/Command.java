@@ -10,7 +10,7 @@ public record Command(String game, String[] arguments) {
     @Override
     public String toString() {
         return "Command{" +
-                ", game='" + game + '\'' +
+                "game='" + game + '\'' +
                 ", arguments=" + Arrays.toString(arguments) +
                 '}';
     }
