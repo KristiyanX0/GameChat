@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d99d42b9-4abc-4634-995a-63d1c7e16bb1" name="Changes" comment="major changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/command/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/command/Command.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/games/tictactoe/TicTacToe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/games/tictactoe/TicTacToe.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/games/tictactoe/TicTacToeExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/games/tictactoe/TicTacToeExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/network/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/network/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Pair.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +70,7 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Client (2)">
+  <component name="RunManager" selected="Application.Client">
     <configuration name="Client (2)" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="network.Client" />
       <module name="GameChat" />
@@ -107,8 +103,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Client (2)" />
         <item itemvalue="Application.Client" />
+        <item itemvalue="Application.Client (2)" />
       </list>
     </recent_temporary>
   </component>

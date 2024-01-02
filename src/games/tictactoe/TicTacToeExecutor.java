@@ -121,10 +121,10 @@ public class TicTacToeExecutor {
 
     public static Response help(Command command, String currentPlayer) {
         String response = "The commands are" + System.lineSeparator() +
-                "*player name* *game name* hit x y - you place your marker on a square where x and y are the coordinates!" + System.lineSeparator() +
-                "*player name* *game name* create - create a new game if it doesn't exist or this one has ended!" + System.lineSeparator() +
-                "*player name* *game name* exit - exit from a game and automatically deletes it!" + System.lineSeparator() +
-                "*player name* *game name* print - prints the board you are playing on!" + System.lineSeparator();
+                "*game name* hit x y - you place your marker on a square where x and y are the coordinates!" + System.lineSeparator() +
+                "*game name* create *player name*  - create a new game if it doesn't exist or this one has ended!" + System.lineSeparator() +
+                "*game name* delete - deletes the game!" + System.lineSeparator() +
+                "*game name* print - prints the board you are playing on!" + System.lineSeparator();
         return new Response(response, List.of(currentPlayer));
     }
 
