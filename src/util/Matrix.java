@@ -17,7 +17,7 @@ public class Matrix {
         }
     }
 
-    private boolean validArguments(int row, int column) {
+    public boolean validArguments(int row, int column) {
         return row < size && column < size;
     }
     public void set(Character c, int row, int column) {

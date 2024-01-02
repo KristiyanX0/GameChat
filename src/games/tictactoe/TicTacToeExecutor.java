@@ -104,11 +104,17 @@ public class TicTacToeExecutor {
         String add = "";
 
         if (games.get(cmd.game()).turn(currentPlayer)) {
-            if (!games.get(cmd.game()).hit(currentPlayer, Integer.parseInt(cmd.command(1)), Integer.parseInt(cmd.command(2)))) {
-                if (games.get(cmd.game()).hasEnded()) {
-                    add = System.lineSeparator() + "Winner: " + games.get(cmd.game()).getWinner();
-                    add += System.lineSeparator() + exit(cmd).message();
+            int row = Integer.parseInt(cmd.command(1));
+            int col = Integer.parseInt(cmd.command(2));
+            if (games.get(cmd.game()).getMatrix().validArguments(row, col)) {
+                if (!games.get(cmd.game()).hit(currentPlayer, row, col)) {
+                    if (games.get(cmd.game()).hasEnded()) {
+                        add = System.lineSeparator() + "Winner: " + games.get(cmd.game()).getWinner();
+                        add += System.lineSeparator() + exit(cmd).message();
+                    }
                 }
+            } else {
+                return new Response("Out of boundaries!", List.of(currentPlayer));
             }
         } else {
             return new Response("Not you turn!", List.of(currentPlayer));
