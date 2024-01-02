@@ -5,7 +5,6 @@ import util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TicTacToe {
     public static final int MATRIX_SIZE = 3;
@@ -27,8 +26,8 @@ public class TicTacToe {
 
     /**
      * @param c   X or O
-     * @param row
-     * @param col
+     * @param row row
+     * @param col column
      * @return If on the specific square we have put a 'c'
      */
     public boolean put(Character c, int row, int col) {
