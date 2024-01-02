@@ -23,7 +23,7 @@ public class TicTacToeExecutor {
     /* ===================== RESPONSES ====================== */
     private static final String END = "GAME HAS ENDED";
     private static final String UNKNOWN_COMMAND = "Unknown command";
-    private static HashMap<String,TicTacToe> games = new HashMap<>();;
+    private static HashMap<String,TicTacToe> games = new HashMap<>();
 
     public static Response execute(Command cmd, String currentPlayer, List<String> clients) {
         return switch (cmd.command(0)) {

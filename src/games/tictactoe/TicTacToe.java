@@ -91,7 +91,7 @@ public class TicTacToe {
             temp = new Pair<>(matrix.get(0, 0), list);
         }
         if (matrix.get(2, 0) == matrix.get(1, 1) && matrix.get(1, 1) == matrix.get(0, 2)
-                && matrix.get(0, 0) != '-') {
+                && matrix.get(2, 0) != '-') {
             ArrayList<Pair<Integer, Integer>> list = new ArrayList<>();
             list.add(new Pair<>(2, 0));
             list.add(new Pair<>(1, 1));
@@ -110,21 +110,22 @@ public class TicTacToe {
     }
 
     public String getWinner() {
-        if (existWinningSequence() || hasEnded()) {
-            List<Pair<Integer, Integer>> list = Objects.requireNonNull(winningSequence()).second();
-            if (matrix.get(list.get(0).first(), list.get(0).second()).equals(player1.first())) {
+        if (hasEnded()) {
+            List<Pair<Integer, Integer>> list = winningSequence().second();
+            if (list == null) {
+                return "DRAW";
+            }
+            else if (matrix.get(list.get(0).first(), list.get(0).second()).equals(player1.first())) {
                 return player1.second();
             } else if (matrix.get(list.get(0).first(), list.get(0).second()).equals(player2.first())) {
                 return player2.second();
-            } else {
-                return "DRAW";
             }
         }
         return null;
     }
 
     public boolean hasEnded() {
-        return existWinningSequence() || (movesCount >= 9);
+        return (movesCount >= 9) || existWinningSequence();
     }
 
     public String turn() {
