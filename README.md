@@ -1,143 +1,143 @@
 # Game Chat
 
-**Game Chat** е платформа, където множество потребители могат да се свързват и да се забавляват. 
-Тук потребителите имат възможността да играят игри за двама помежду си. В момента чатът 
-поддържа само играта TicTacToe, където всеки клиент (играч) може да създава игра с 
-друг клиент.
+**Game Chat** is a platform where multiple users can connect and have fun.
+Users have the opportunity to play two-player games with each other. Currently, the chat
+supports only TicTacToe, where each client (player) can create a game with
+another client.
 
-## Архитектура:
+## Architecture:
 ![img_1.png](img_1.png)
 
-Проектът е организиран в различни пакети, като всяка група от файлове 
-има свое предназначение и функционалност.
+The project is organized into different packages, with each group of files
+having its purpose and functionality.
 
-1. ##### command: Този пакет съдържа класове, отговорни за обработката на текстови команди, предоставяни от потребителя.
-    1. `Command.java` - дефинира модела на командата.
-    2. `CommandCreator.java` - създава инстанции на команди от текстови входове.
-    3. `CommandExecutor.java` - изпълнява командите, предавани от потребителя.
-2. ##### games.tictactoe: В този пакет се съдържат файлове, които управляват играта TicTacToe.
-   1. `TicTacToe.java` - дефинира правилата и състоянието на играта.
-   2. `TicTacToeExecutor.java` - изпълнява командите свързани с TicTacToe и поддържа активните игри. 
-3. ##### network: Този пакет обхваща файлове, които управляват комуникацията между клиенти и сървър.
-   1. `Client.java` - представлява клиентската част на комуникацията.
-   2. `ClientHandler.java` - обработва комуникацията от страна на сървъра за всеки клиент.
-   3. `Server.java` - предоставя сървърна част за приемане на входящи връзки от клиенти.
-   4. `TypeNotification.java` - дефинира типове за уведомления при комуникация.
-4. ##### util: В този пакет се намират помощни класове, които се използват от различни части на приложението. 
-   1. `Matrix.java` - представлява матрица за игровото поле или други подобни приложения.
-   2. `Pair.java` - дефинира обобщен клас за двойка стойности.
-   3. `Response.java` - моделира отговор от изпълнението на команда, включващ съобщение и списък от свързани клиенти.
+1. ##### command: This package contains classes responsible for processing text commands provided by the user.
+    1. `Command.java` - defines the command model.
+    2. `CommandCreator.java` - creates instances of commands from text inputs.
+    3. `CommandExecutor.java` - executes commands submitted by the user.
+2. ##### games.tictactoe: This package contains files that manage the TicTacToe game.
+   1. `TicTacToe.java` - defines the rules and state of the game.
+   2. `TicTacToeExecutor.java` - executes commands related to TicTacToe and maintains active games. 
+3. ##### network: This package covers files that manage communication between clients and server.
+   1. `Client.java` - represents the client side of communication.
+   2. `ClientHandler.java` - handles communication from the server side for each client.
+   3. `Server.java` - provides a server part for accepting incoming connections from clients.
+   4. `TypeNotification.java` - defines types for notifications during communication.
+4. ##### util: This package contains utility classes used by different parts of the application. 
+   1. `Matrix.java` - represents a matrix for the game board or other similar applications.
+   2. `Pair.java` - defines a generic class for a pair of values.
+   3. `Response.java` - models a response from command execution, including a message and a list of associated clients.
 
-В следващите подразделения ще разгледаме всяко от тях по-подробно.
+In the following sections, we'll look at each of them in more detail.
 
-## Пакет: command
-Пакетът command е отговорен за обработката на текстови команди, предоставяни от 
-потребителя. Тук се дефинират, създават и изпълняват команди. Няколко ключови 
-класове в този пакет се използват за управление на командите в приложението.
+## Package: command
+The command package is responsible for processing text commands provided by 
+the user. Here, commands are defined, created, and executed. Several key 
+classes in this package are used to manage commands in the application.
 
 1. ##### Command.java:
-   Command представлява модел за съхранение на информацията за определена команда. Важни атрибути и методи включват:
-   - `game()`: Връща името на играта, свързана с командата.
-   - `command(int index)`: Връща част от командата по подаден индекс.
-   - `toString()`: Преобразува командата в низ за по-лесно четене и разбиране.
+   Command represents a model for storing information about a specific command. Important attributes and methods include:
+   - `game()`: Returns the name of the game associated with the command.
+   - `command(int index)`: Returns part of the command by the given index.
+   - `toString()`: Converts the command to a string for easier reading and understanding.
 2. ##### CommandCreator.java:
-   CommandCreator отговаря за създаването на обекти от тип Command чрез обработка на текстови команди от потребителите. Включва методи като:
-   - `newCommand(String input)`: Създава нов обект Command на базата на текстова команда.
+   CommandCreator is responsible for creating Command objects by processing text commands from users. It includes methods such as:
+   - `newCommand(String input)`: Creates a new Command object based on a text command.
 3. ##### CommandExecutor.java:
-   CommandExecutor изпълнява командите в контекста на играта. Важни методи са:
-   - `execute(Command cmd, String currentPlayer, List<String> clients)`: Изпълнява подадената команда в играта, взимайки предвид текущия играч и списъка с клиенти.
-   - `isCommand(Set<String> clients, String input)`: Проверява дали подаденият текст е команда, която може да се обработи.
+   CommandExecutor executes commands in the context of the game. Important methods are:
+   - `execute(Command cmd, String currentPlayer, List<String> clients)`: Executes the given command in the game, considering the current player and the list of clients.
+   - `isCommand(Set<String> clients, String input)`: Checks if the given text is a command that can be processed.
 
 
-Пакет: games.tictactoe
-Пакетът games.tictactoe е отговорен за всичко свързано с логиката и изпълнението на играта TicTacToe.
+## Package: games.tictactoe
+The games.tictactoe package is responsible for everything related to the logic and execution of the TicTacToe game.
 
 1. ##### TicTacToe.java:
-   Класът TicTacToe представлява самата игра TicTacToe. Някои от ключовите атрибути и методи включват:
-   - Атрибути: 
-     - `player1 и player2`: Представляват двама играчи в играта.
-     - `matrix`: Представлява игралната дъска в матричен вид. 
-   - Методи:
-     - `turn(String currentPlayer)`: Проверява дали е текущият играч на ход.
-     - `hit(String currentPlayer, int row, int column)`: Изпълнява хода на играча въз основа на подадените ред и колона.
-     - `hasEnded()`: Проверява дали играта е приключила.
-     - `getWinner()`: Връща победителя на играта.
+   The TicTacToe class represents the actual TicTacToe game. Some of the key attributes and methods include:
+   - Attributes: 
+     - `player1 and player2`: Represent the two players in the game.
+     - `matrix`: Represents the game board in matrix form. 
+   - Methods:
+     - `turn(String currentPlayer)`: Checks if it's the current player's turn.
+     - `hit(String currentPlayer, int row, int column)`: Executes the player's move based on the given row and column.
+     - `hasEnded()`: Checks if the game has ended.
+     - `getWinner()`: Returns the winner of the game.
 2. ##### TicTacToeExecutor.java:
-   TicTacToeExecutor управлява изпълнението на командите, свързани с TicTacToe. Ключовите компоненти са:
-   - Команди в играта:
-      - CREATE: Създава нова игра.
-      - SIGN: Показва знака (X или O) на текущия играч.
-      - HIT: Изпълнява ход на даден играч.
-      - EXIT: Приключва играта.
-      - PRINT: Извежда текущото състояние на игралната дъска.
-      - HELP: Извежда списък с налични команди.
-      - LIST: Извежда списък с активните игри.
-      - DELETE: Изтрива дадена игра.
-   - Методи:
-      - `execute(Command cmd, String currentPlayer, List<String> clients)`: Изпълнява дадена команда в контекста на играта.
-      - `newGame(Command command, String currentPlayer, List<String> clients)`: Създава нова игра.
-      - `ifGameExist(Command command)`: Проверява дали играта съществува.
-      - `delete(Command cmd, String currentPlayer)`: Изтрива игра.
-      - `mySign(Command cmd, String currentPlayer)`: Връща знака на текущия играч.
-      - `print(Command cmd, List<String> players, String addMessage)`: Извежда състоянието на игралната дъска.
-      - `hit(Command cmd, String currentPlayer)`: Изпълнява ход на играча.
-      - `exit(Command command)`: Приключва играта.
-      - `help(Command command, String currentPlayer)`: Извежда списък с налични команди.
-      - `listOfActiveGames(Command command, String currentPlayer)`: Извежда списък с активните игри.
+   TicTacToeExecutor manages the execution of commands related to TicTacToe. Key components are:
+   - Game Commands:
+      - CREATE: Creates a new game.
+      - SIGN: Shows the sign (X or O) of the current player.
+      - HIT: Executes a player's move.
+      - EXIT: Ends the game.
+      - PRINT: Displays the current state of the game board.
+      - HELP: Displays a list of available commands.
+      - LIST: Displays a list of active games.
+      - DELETE: Deletes a game.
+   - Methods:
+      - `execute(Command cmd, String currentPlayer, List<String> clients)`: Executes a given command in the context of the game.
+      - `newGame(Command command, String currentPlayer, List<String> clients)`: Creates a new game.
+      - `ifGameExist(Command command)`: Checks if the game exists.
+      - `delete(Command cmd, String currentPlayer)`: Deletes a game.
+      - `mySign(Command cmd, String currentPlayer)`: Returns the sign of the current player.
+      - `print(Command cmd, List<String> players, String addMessage)`: Displays the state of the game board.
+      - `hit(Command cmd, String currentPlayer)`: Executes a player's move.
+      - `exit(Command command)`: Ends the game.
+      - `help(Command command, String currentPlayer)`: Displays a list of available commands.
+      - `listOfActiveGames(Command command, String currentPlayer)`: Displays a list of active games.
 
-## Пакет: network
-Пакетът network играе ключова роля в установяването и поддържането на връзка 
-между клиентите и сървъра. Включва класове, които управляват комуникацията, 
-обработват съобщенията и осигуряват общ чат между потребителите.
+## Package: network
+The network package plays a key role in establishing and maintaining a connection 
+between clients and the server. It includes classes that manage communication, 
+process messages, and provide a general chat between users.
 
 1. ##### Client.java:
-  Класът Client представлява клиентската част на приложението. Важни методи и техните функции са:
-  - `sendMessage()`: Методът позволява на клиента да изпраща съобщения до сървъра. Първоначално се изпраща потребителското име, 
-     а след това потребителят въвежда текстови съобщения.
-  - `listenForMessage()`: Асинхронен метод, който слуша за съобщения от сървъра и ги извежда на конзолата на клиента.
-  - `closeEverything()`: Затваря сокета и потоците за четене и писане в случай на грешка или прекъсване на връзката.
+  The Client class represents the client side of the application. Important methods and their functions are:
+  - `sendMessage()`: The method allows the client to send messages to the server. Initially, the username is sent, 
+     and then the user enters text messages.
+  - `listenForMessage()`: An asynchronous method that listens for messages from the server and displays them on the client's console.
+  - `closeEverything()`: Closes the socket and the read and write streams in case of an error or connection interruption.
 2. ##### ClientHandler.java:
-   ClientHandler управлява връзката между сървъра и отделни клиенти. Важни методи включват:
-   - `createAnInstance(Socket socket)`: Създава нов ClientHandler и стартира нишка за обработка на връзката с клиента.
-   - `sendMessage(String message, TypeNotification typeNotification, Set<String> usernames)`: Изпраща съобщение до определени потребители спрямо TypeNotification.
-   - `sendMessage(String message, TypeNotification typeNotification, String username)`: Изпраща съобщение до конкретен потребител.
-   - `sendMessage(String message, TypeNotification typeNotification)`: Изпраща съобщение до всички потребители или до тези, различни от текущия, спрямо TypeNotification.
-   - `removeClientHandler()`: Премахва текущия ClientHandler и изпраща съобщение, че потребителят е напуснал чата.
-   - `isFull()`: Проверява дали чатът е пълен.
+   ClientHandler manages the connection between the server and individual clients. Important methods include:
+   - `createAnInstance(Socket socket)`: Creates a new ClientHandler and starts a thread to handle the connection with the client.
+   - `sendMessage(String message, TypeNotification typeNotification, Set<String> usernames)`: Sends a message to specific users based on TypeNotification.
+   - `sendMessage(String message, TypeNotification typeNotification, String username)`: Sends a message to a specific user.
+   - `sendMessage(String message, TypeNotification typeNotification)`: Sends a message to all users or to those different from the current one, based on TypeNotification.
+   - `removeClientHandler()`: Removes the current ClientHandler and sends a message that the user has left the chat.
+   - `isFull()`: Checks if the chat is full.
 3. ##### Server.java:
-   Класът Server управлява сървъра, който приема връзки от клиенти. Включва методи като:
-   - `startServer()`: Началната точка на сървъра, където се приемат и обработват връзките от клиенти.
-   - `closeServerSocket()`: Затваря сървърния сокет в случай на грешка или прекъсване на връзката.
+   The Server class manages the server that accepts connections from clients. It includes methods such as:
+   - `startServer()`: The starting point of the server, where connections from clients are accepted and processed.
+   - `closeServerSocket()`: Closes the server socket in case of an error or connection interruption.
 4. ##### TypeNotification.java:
-   Дефиниране на типове известия за съобщенията между клиентите. 
-   Включва `BROADCAST` за общи известия, `OTHER_PLAYERS` за съобщения до други клиенти и `PLAYER` 
-   за съобщения до конкретен клиент.
+   Defines notification types for messages between clients. 
+   Includes `BROADCAST` for general notifications, `OTHER_PLAYERS` for messages to other clients, and `PLAYER` 
+   for messages to a specific client.
 
-## Пакет: util
-Пакетът util предоставя поддръжка на основни структури и функционалности, използвани в целия проект.
+## Package: util
+The util package provides support for basic structures and functionalities used throughout the project.
 
 1. ##### Matrix.java:
-   Класът Matrix представлява матрица, използвана за представяне на игралната дъска в TicTacToe.
-   - `size`: Поле, определящо размера на матрицата (игралната дъска).
-   - `matrix`: Двуизмерен масив от символи, представляващ игралната дъска.
-   - `Matrix(int size)`: Конструктор, създаващ матрица с определен размер и попълващ я със зададен символ (в случая "-").
-   - `validArguments(int row, int column)`: Проверява дали зададените ред и колона са валидни за матрицата.
-   - `set(Character c, int row, int column)`: Задава стойност на определена клетка в матрицата.
-   - `get(int row, int column)`: Връща стойността на определена клетка в матрицата.
-   - `size()`: Връща размера на матрицата.
+   The Matrix class represents a matrix used to represent the game board in TicTacToe.
+   - `size`: Field defining the size of the matrix (game board).
+   - `matrix`: Two-dimensional array of characters representing the game board.
+   - `Matrix(int size)`: Constructor creating a matrix of a specific size and filling it with a given character (in this case "-").
+   - `validArguments(int row, int column)`: Checks if the given row and column are valid for the matrix.
+   - `set(Character c, int row, int column)`: Sets a value to a specific cell in the matrix.
+   - `get(int row, int column)`: Returns the value of a specific cell in the matrix.
+   - `size()`: Returns the size of the matrix.
 2. ##### Pair.java:
-   Pair е прости клас за представяне на наредена двойка от два обекта.
-   - `first и second`: Полета, съхраняващи двата обекта от наредената двойка.
-   - `Pair(A first, B second)`: Конструктор, създаващ нова наредена двойка с подадените стойности.
+   Pair is a simple class for representing an ordered pair of two objects.
+   - `first and second`: Fields storing the two objects of the ordered pair.
+   - `Pair(A first, B second)`: Constructor creating a new ordered pair with the given values.
 3. ##### Response.java:
-   Response представлява отговор, който съдържа текстово съобщение и списък от клиенти, които трябва да получат този отговор.
-   - `message`: Текстово съобщение, което трябва да бъде изпратено.
-   - `client`: Списък от клиенти, които трябва да получат съобщението.
-   - `Response(String message, List<String> client)`: Конструктор, инициализиращ нов отговор със зададен текст и списък от клиенти.
+   Response represents a response containing a text message and a list of clients who should receive this response.
+   - `message`: Text message to be sent.
+   - `client`: List of clients who should receive the message.
+   - `Response(String message, List<String> client)`: Constructor initializing a new response with a given text and list of clients.
 
-## Примерно разиграване
+## Example Gameplay
 ![img.png](img.png)
 
-## Обобщение на Реализацията:
-Проектът **Game Chat** предоставя функционалност за мултиплейър комуникация и игра. В момента се поддържа само играта TicTacToe, 
-но архитектурата е проектирана с възможност за бъдещо разширение с нови игри.
+## Implementation Summary:
+The **Game Chat** project provides functionality for multiplayer communication and gameplay. Currently, only the TicTacToe game is supported, 
+but the architecture is designed with the possibility of future expansion with new games.
